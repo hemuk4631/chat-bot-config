@@ -25,7 +25,7 @@ function ButtonsInputForm({ node, nodes, edges }) {
       setConnectedNodes(nodeConnected);
     };
     getConnectedNodes(node.id);
-  }, [nodes, node.id, deleteElements, addNodes, addEdges]);
+  }, [nodes, node.id, deleteElements, edges, addNodes, addEdges]);
 
   // const connectedNodes = useConnectedNodes(node?.id);
 
@@ -35,8 +35,13 @@ function ButtonsInputForm({ node, nodes, edges }) {
       id: nanoid(),
       type: Chat.button,
       position: {
-        x: connectedNodes[(connectedNodes?.length ?? 0) - 1]?.position?.x + 100,
-        y: connectedNodes[0]?.position?.y,
+        x:
+          (
+            connectedNodes[(connectedNodes?.length ?? 0) - 1] as {
+              position?: { x: number };
+            }
+          )?.position?.x + 100,
+        y: (connectedNodes[0] as { position?: { y: number } })?.position?.y,
       },
       data: {
         [Chat.nodeTitle]: `New Option`,
