@@ -53,13 +53,13 @@ function ChatFlowHeader({
   };
 
   return (
-    <div className="fixed z-100  h-14 w-full  shadow bg-white">
+    <div className={`z-100 fixed  h-14 w-full  shadow bg-white `}>
       <div className="flex h-full items-center justify-between px-8 text-sm">
         {/* Home & Save Buttons */}
         <div className="flex items-center gap-4">
           <button
-            className="rounded-md border px-4 py-1"
-            onClick={() => Router.push('/chat-config')}>
+            className="rounded-md border px-4 py-1 cursor-pointer"
+            onClick={() => Router.push('/')}>
             Home
           </button>
           <form>

@@ -157,7 +157,7 @@ function CustomNode({ type, data, selected }: NodeProps<CustomNode>) {
       )}
       {type === Chat.button && (
         <div
-          className={`relative  w-24  h-10 rounded-md bg-gray-0 p-2  text-white shadow-md`}>
+          className={`relative  w-24  h-10 rounded-md bg-gray-500 p-2  text-white shadow-md`}>
           <header className="truncate text-center text-sm font-semibold">
             {title}
           </header>

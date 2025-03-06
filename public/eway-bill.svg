@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Background Rectangle -->
+  <rect width="100%" height="100%" fill="white" />
+  
+  <!-- Speed Background -->
+  <circle cx="12" cy="12" r="10" fill="lightblue" />
+  
+  <!-- Speed Lines -->
+  <line x1="12" y1="12" x2="16" y2="12" stroke="white" stroke-width="2" />
+  <line x1="12" y1="12" x2="15" y2="9" stroke="white" stroke-width="2" />
+  <line x1="12" y1="12" x2="14" y2="14" stroke="white" stroke-width="2" />
+  
+  <!-- Car Body -->
+  <rect x="4" y="10" width="16" height="4" fill="black" />
+  <rect x="5" y="8" width="14" height="2" fill="black" />
+  <circle cx="6" cy="18" r="4" fill="black" />
+  <circle cx="18" cy="18" r="4" fill="black" />
+</svg>

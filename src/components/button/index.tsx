@@ -26,14 +26,12 @@ const Button: FC<BtnProps> = ({
   title,
 }: BtnProps) => {
 
-  const secondaryClass = `w-full h-10  whitespace-nowrap  border border-solid  py-2 px-6 rounded bg-white-0 text-base font-medium ${
-    disabled
-      ? 'text-gray-0 border-gray-0'
-      : `hover:bg-[#f8faeb]`
+  const secondaryClass = `w-full h-10   whitespace-nowrap  border border-solid  py-2 px-6 rounded bg-white-0 text-base font-medium ${
+    disabled ? 'text-gray-0 border-gray-0' : `hover:bg-[#f8faeb]`
   } ${className}`;
 
-  const primaryClass = `w-full h-10 whitespace-nowrap  bg-blue-c2
-  } text-white-0 py-2 px-6 rounded text-base font-medium ${
+  const primaryClass = `w-full h-10 whitespace-nowrap  bg-blue-500 text-white
+   py-2 px-6 rounded text-base font-medium ${
     disabled ? '!bg-[#E6E6E6] text-gray-1000' : ``
   } ${
     color === 'Red' && 'bg-red-800 text-white-0 hover:bg-red-800'
@@ -45,10 +43,9 @@ const Button: FC<BtnProps> = ({
         type={type}
         ref={clickRef && clickRef}
         disabled={disabled}
-        className={btnType === 'Primary' ? primaryClass : secondaryClass}
+        className={btnType === 'primary' ? primaryClass : secondaryClass}
         onClick={onClick}
-        title={title}
-      >
+        title={title}>
         {btnName}
       </button>
     </div>
