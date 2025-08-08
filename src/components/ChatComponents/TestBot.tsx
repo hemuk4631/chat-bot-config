@@ -12,6 +12,7 @@ import { Chat } from '@/types/enums';
 // import FetchApi, { FileUploadApi } from '@/utils/apiUtils';
 import { getCookie } from 'cookies-next';
 import { toast } from 'react-toastify';
+import { CldImage } from 'next-cloudinary';
 
 interface ChatNode {
   id: string;
@@ -197,14 +198,16 @@ function TestBot({ chatNodes }) {
   useEffect(() => {
     addNextMessage(currentNodeId);
   }, []);
+  console.log(messages)
   return (
-    <div className="relative chat-container bg-white-0 shadow-md">
+    <div className="relative chat-container bg-white shadow-md">
       <div className="container-head"></div>
       <div className="chat-ground">
         {messages?.length < 1 ? (
           <div
             className={`text-container  rounded-md
-           bg-[#F4F0FF] px-4 py-2`}>
+           bg-[#F4F0FF] px-4 py-2`}
+          >
             Loading...
           </div>
         ) : (
@@ -214,12 +217,14 @@ function TestBot({ chatNodes }) {
                 key={index}
                 className={`${
                   msg?.from === Chat?.bot ? 'bot-section' : 'user-section'
-                } flex  gap-2 mt-4`}>
+                } flex  gap-2 mt-4`}
+              >
                 {msg?.from === Chat?.bot && (
                   <div
                     className={`size-fit rounded-full bg-[#F4F0FF] p-1 
                   
-                  `}>
+                  `}
+                  >
                     <img
                       src={
                         msg?.from === Chat?.bot
@@ -241,7 +246,8 @@ function TestBot({ chatNodes }) {
                         msg?.from === Chat?.bot
                           ? 'bg-[#F4F0FF]'
                           : 'bg-[#F7F7F7]'
-                      } rounded-md px-4 py-2`}>
+                      } rounded-md px-4 py-2`}
+                    >
                       {loading &&
                       msg?.from === Chat?.bot &&
                       index === messages.length - 1
@@ -252,15 +258,18 @@ function TestBot({ chatNodes }) {
                     {msg?.data?.files && (
                       <div className="grid grid-cols-3 gap-2">
                         {msg?.data?.files?.map((file) => (
-                          <div key={file?.id} className="m-auto">
-                            <img
-                              src={ file?.url}
-                              alt="file"
-                              width={50}
-                              height={50}
-                              className="object-contain"
-                            />
-                          </div>
+                          <div className='m-auto pt-2'>
+                          <CldImage
+                            alt="img"
+                            src={file}
+                            width="30"
+                            height="30"
+                            crop={{
+                              type: 'auto',
+                              source: true,
+                            }}
+                          />
+                        </div>
                         ))}
                       </div>
                     )}
@@ -273,13 +282,15 @@ function TestBot({ chatNodes }) {
                           msg?.from === Chat?.bot
                             ? 'bg-[#F4F0FF]'
                             : 'bg-[#F7F7F7]'
-                        } rounded-md px-4 py-2`}>
+                        } rounded-md px-4 py-2`}
+                      >
                         {msg?.data?.message}
                       </div>
                       <div
                         className={`my-4 flex flex-col rounded-md border border-[#F4F0FF] px-2 ${
                           index < messages?.length - 1 && 'hidden'
-                        }`}>
+                        }`}
+                      >
                         {msg?.data?.options?.map((option, i) => (
                           <button
                             key={i}
@@ -291,7 +302,8 @@ function TestBot({ chatNodes }) {
                               );
                               // addNextMessage(option?.targetNode);
                             }}
-                            className={`border-b p-2 text-[#7F56D9]`}>
+                            className={`border-b p-2 text-[#7F56D9]`}
+                          >
                             {option?.name || option?.category}
                           </button>
                         ))}
@@ -305,7 +317,8 @@ function TestBot({ chatNodes }) {
                         msg?.from === Chat?.bot
                           ? 'bg-[#F4F0FF]'
                           : 'bg-[#F7F7F7]'
-                      } rounded-md px-4 py-2`}>
+                      } rounded-md px-4 py-2`}
+                    >
                       {loading &&
                       msg?.from === Chat?.bot &&
                       index === messages.length - 1
@@ -320,7 +333,8 @@ function TestBot({ chatNodes }) {
                         msg?.from === Chat?.bot
                           ? 'bg-[#F4F0FF]'
                           : 'bg-[#F7F7F7]'
-                      } rounded-md px-4 py-2`}>
+                      } rounded-md px-4 py-2`}
+                    >
                       {loading &&
                       msg?.from === Chat?.bot &&
                       index === messages.length - 1
@@ -376,7 +390,8 @@ function TestBot({ chatNodes }) {
               <label
                 htmlFor="fileInput"
                 title="Upload File"
-                className="cursor-pointer ">
+                className="cursor-pointer "
+              >
                 <img src="/upload-file.svg" className="size-6" />
               </label>
 

@@ -50,7 +50,7 @@ function FeedbackNodeForm({ node, nodes, edges }) {
 
       <div className="mt-1 text-sm text-gray-600">Bot asks this Question</div>
 
-      <div className="mt-2 rounded-md border bg-white-0 p-2">
+      <div className="mt-2 rounded-md border bg-white p-2">
         <textarea
           className="h-24 w-full resize-none border-none p-2 text-xs focus:ring-0"
           defaultValue={message ? message : ''}
@@ -62,7 +62,7 @@ function FeedbackNodeForm({ node, nodes, edges }) {
           }}
         />
       </div>
-      <div className="bg-white-0  rounded-md">
+      <div className="bg-white  rounded-md">
         <h2 className="mt-1 text-sm text-gray-600">
           Options buttons to be shown
         </h2>
@@ -71,7 +71,7 @@ function FeedbackNodeForm({ node, nodes, edges }) {
             <input
               type="text"
               disabled
-              className="bg-blue-c2 text-center text-white-0 outline-none w-full rounded-md p-2"
+              className="bg-blue-c2 text-center text-white outline-none w-full rounded-md p-2"
               defaultValue={ele?.data?.[Chat.nodeTitle] || ''}
               onChange={(e) => {
                 const newTitle = e.target.value;

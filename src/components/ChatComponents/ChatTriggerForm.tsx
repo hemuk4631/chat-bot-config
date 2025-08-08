@@ -91,7 +91,7 @@ const ChatTriggerForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
 
       <div className="mt-1 text-sm text-gray-600">Sends this message</div>
 
-      <div className="mt-2 rounded-md border bg-white-0 p-2">
+      <div className="mt-2 rounded-md border bg-white p-2">
         <textarea
           className="h-24 w-full resize-none border-none p-2 text-xs focus:ring-0"
           defaultValue={message ? message : ''}
@@ -113,7 +113,8 @@ const ChatTriggerForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
         selectedFile?.map((ele, i) => (
           <div
             key={i}
-            className="my-2 flex items-center justify-between rounded-md bg-white-100 px-4 py-2">
+            className="my-2 flex items-center justify-between rounded-md bg-gray-200 px-4 py-2"
+          >
             <div>
               <img src={ele?.url} alt="" className="w-8" />
             </div>

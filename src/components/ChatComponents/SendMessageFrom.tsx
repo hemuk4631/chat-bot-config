@@ -4,7 +4,7 @@ import { getCookie } from 'cookies-next';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Chat } from '@/types/enums';
-
+import { CldImage } from 'next-cloudinary';
 import type { ChatFlowNodesData } from '@/types/enums';
 // import {
 //   DELETE_FILE,
@@ -14,65 +14,104 @@ import type { ChatFlowNodesData } from '@/types/enums';
 // import FetchApi, { FileUploadApi } from '@/utils/apiUtils';
 
 // import Loader from '../loader';
-
 const SendMessageForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
+  console.log(node?.data);
   const [fileLoader, setFileLoader] = useState(false);
   const { updateNodeData } = useReactFlow();
 
   const message = node?.data?.[Chat.nodeMessage];
   // Upload File
-  // const fileChangeHandler = async (e: React.ChangeEvent) => {
-  //   setFileLoader(true);
-  //   const formData = new FormData();
+  const fileChangeHandler = async (e: React.ChangeEvent) => {
+    setFileLoader(true);
+    const formData = new FormData();
 
-  //   formData.append('file', e?.target?.files[0]);
-  //   if (e?.target?.files[0]) {
-  //     try {
-  //       const rawRes = FileUploadApi(
-  //         UPLOAD_FILE,
-  //         'POST',
-  //         {
-  //           Authorization: `Bearer ${getCookie('accessToken')}`,
-  //         },
-  //         formData
-  //       );
+    formData.append('file', e?.target?.files[0]);
+    if (e?.target?.files[0]) {
+      try {
+        // const rawRes = FileUploadApi(
+        //   UPLOAD_FILE,
+        //   'POST',
+        //   {
+        //     Authorization: `Bearer ${getCookie('accessToken')}`,
+        //   },
+        //   formData
+        // );
 
-  //       const res = await rawRes;
-  //       if (res.status === 401) {
-  //         setFileLoader(false);
-  //         toast.error('You are not authorized');
-  //       }
-  //       const jsonRes = await res.json();
+        // const res = await rawRes;
+        // if (res.status === 401) {
+        //   setFileLoader(false);
+        //   toast.error('You are not authorized');
+        // }
+        // const jsonRes = await res.json();
+        formData.append('file', e?.target?.files[0]);
+        formData.append('upload_preset', 'upload-image'); // e.g., "my_uploads"
 
-  //       setFileLoader(false);
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
 
-  //       updateNodeData(node?.id, {
-  //         files: node?.data?.files
-  //           ? [...node?.data?.files, jsonRes?.payload]
-  //           : [jsonRes?.payload],
-  //       });
-  //     } catch (e) {}
-  //   }
-  // };
-  // // Delete file
-  // const fileDeleteHandler = (id) => {
-  //   setFileLoader(true);
+        const data = await response.json();
+        setFileLoader(false);
 
-  //   async function deleteFile() {
-  //     const res = FetchApi(DELETE_FILE + id, 'DELETE', {
-  //       Authorization: `Bearer ${getCookie('accessToken')}`,
-  //     });
-  //     const data = await res;
-  //     if (data?.payload) {
-  //       setFileLoader(false);
-  //       updateNodeData(node.id, {
-  //         files: node?.data?.files?.filter((ele) => ele?.id !== id),
-  //       });
-  //     }
-  //     setFileLoader(false);
-  //   }
-  //   deleteFile();
-  // };
+        updateNodeData(node?.id, {
+          files: node?.data?.files
+            ? [...node?.data?.files, data.public_id]
+            : [data.public_id],
+        });
+      } catch (e) {}
+    }
+  };
+  // Delete file
+  const fileDeleteHandler = (id) => {
+    setFileLoader(true);
+
+    // async function deleteFile() {
+    //   // const res = FetchApi(DELETE_FILE + id, 'DELETE', {
+    //   //   Authorization: `Bearer ${getCookie('accessToken')}`,
+    //   // });
+    //   // const data = await res;
+    //   // if (data?.payload) {
+
+    //   updateNodeData(node.id, {
+    //     files: node?.data?.files?.filter((ele) => ele?.id !== id),
+    //   });
+    //   // }
+    //   setFileLoader(false);
+    // }
+    const deleteFile = async (publicId: string) => {
+      try {
+        const res = await fetch('api/deleteImage', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ public_id: publicId }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        if (data.result) {
+          toast.success('Image deleted successfully!');
+            updateNodeData(node.id, {
+        files: node?.data?.files?.filter((ele) => ele !== publicId),
+      });
+        } else {
+          console.error('Delete failed:', data);
+          toast.error('Failed to delete image');
+        }
+      } catch (err) {
+        toast.error('Error deleting image:', err);
+      }finally{
+        setFileLoader(false);
+      }
+    };
+    deleteFile(id);
+  };
   return (
     <div className="max-w-md rounded-md border  p-4">
       {/* Header */}
@@ -97,7 +136,7 @@ const SendMessageForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
 
       <div className="mt-1 text-sm text-gray-600">Sends this message</div>
 
-      <div className="mt-2 rounded-md border bg-white-0 p-2">
+      <div className="mt-2 rounded-md border bg-white p-2">
         <textarea
           className="h-24 w-full resize-none border rounded-md p-2 text-xs focus:ring-0"
           defaultValue={message ? message : ''}
@@ -116,22 +155,28 @@ const SendMessageForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
       </div>
       {node?.data?.files?.map((ele, i) => (
         <div
-          key={ele?.id}
-          className="my-2 flex items-center justify-between rounded-md bg-white-100 px-4 py-2">
+          key={ele}
+          className="my-2 flex items-center justify-between rounded-md bg-gray-200 px-4 py-2"
+        >
           <div>
-            <img
-              src={ ele?.url}
-              alt={`file`}
-              className="w-8"
+            <CldImage
+              alt="img"
+              src={ele}
+              width="30"
+              height="30"
+              crop={{
+                type: 'auto',
+                source: true,
+              }}
             />
           </div>
           <div>
             <img
               src="/delete.svg"
-              alt=""
-              // onClick={() => {
-              //   fileDeleteHandler(ele?.id);
-              // }}
+              alt="delete"
+              onClick={() => {
+                fileDeleteHandler(ele);
+              }}
             />
           </div>
         </div>
@@ -147,7 +192,7 @@ const SendMessageForm = ({ node }: { node: Node<ChatFlowNodesData> }) => {
             <input
               type="file"
               className="hidden"
-              // onChange={(e) => fileChangeHandler(e)}
+              onChange={(e) => fileChangeHandler(e)}
             />
           </label>
         )}

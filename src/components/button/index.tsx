@@ -26,15 +26,15 @@ const Button: FC<BtnProps> = ({
   title,
 }: BtnProps) => {
 
-  const secondaryClass = `w-full h-10   whitespace-nowrap  border border-solid  py-2 px-6 rounded bg-white-0 text-base font-medium ${
+  const secondaryClass = `w-full h-10   whitespace-nowrap  border border-solid  py-2 px-6 rounded bg-white text-base font-medium ${
     disabled ? 'text-gray-0 border-gray-0' : `hover:bg-[#f8faeb]`
   } ${className}`;
 
   const primaryClass = `w-full h-10 whitespace-nowrap  bg-blue-500 text-white
    py-2 px-6 rounded text-base font-medium ${
-    disabled ? '!bg-[#E6E6E6] text-gray-1000' : ``
-  } ${
-    color === 'Red' && 'bg-red-800 text-white-0 hover:bg-red-800'
+     disabled ? '!bg-[#E6E6E6] text-gray-1000' : ``
+   } ${
+    color === 'Red' && 'bg-red-800 text-white hover:bg-red-800'
   } ${className}`;
 
   return (

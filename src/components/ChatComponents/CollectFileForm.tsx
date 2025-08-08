@@ -89,7 +89,7 @@ const CollectFileFrom = ({ node }: { node: Node<ChatFlowNodesData> }) => {
 
       {/* Question Input */}
       <div className="mt-2 border rounded-md p-2 bg-white">
-        <div className="mt-2 rounded-md border bg-white-0 p-2">
+        <div className="mt-2 rounded-md border bg-white p-2">
           <textarea
             className="h-24 w-full resize-none border-none p-2 text-xs focus:ring-0"
             defaultValue={message}
@@ -135,13 +135,15 @@ const CollectFileFrom = ({ node }: { node: Node<ChatFlowNodesData> }) => {
             updateNodeData(node?.id, {
               [Chat.maxSize]: e.target.value,
             })
-          }>
+          }
+        >
           {maxFileSize?.map(({ label, value }) => (
             <option
               key={value}
               value={value}
               selected={value === maxSize}
-              disabled={value === ''}>
+              disabled={value === ''}
+            >
               {label}
             </option>
           ))}
@@ -158,13 +160,15 @@ const CollectFileFrom = ({ node }: { node: Node<ChatFlowNodesData> }) => {
             updateNodeData(node?.id, {
               [Chat.maxUploads]: Number(e.target.value),
             })
-          }>
+          }
+        >
           {maxUploadsLimits?.map(({ label, value }) => (
             <option
               key={value}
               value={value}
               selected={value === maxUploads}
-              disabled={value === 0}>
+              disabled={value === 0}
+            >
               {label}
             </option>
           ))}

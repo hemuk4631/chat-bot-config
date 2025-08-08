@@ -53,7 +53,7 @@ function ChatFlowHeader({
   };
 
   return (
-    <div className={`z-100 fixed  h-14 w-full  shadow bg-white `}>
+    <div className={`z-100 fixed  top-0 h-14 w-full  shadow-md bg-white `}>
       <div className="flex h-full items-center justify-between px-8 text-sm">
         {/* Home & Save Buttons */}
         <div className="flex items-center gap-4">
@@ -104,17 +104,17 @@ function ChatFlowHeader({
         {/* Test & Deploy Buttons */}
         <form className=" flex  gap-4">
           <button
-            className="h-8 w-20 rounded-md border px-4 py-1"
+            className="h-8 w-20 rounded-md border px-4 py-1 cursor-pointer"
             type="button"
             onClick={onTest}>
             Test
           </button>
-          <button
+          {/* <button
             className="h-8 w-20 rounded-md bg-green-600 px-4 py-1 text-white"
             type="submit"
             onClick={handleSubmit(onSubmit('deploy'))}>
             Deploy
-          </button>
+          </button> */}
         </form>
         {/* </form> */}
       </div>
