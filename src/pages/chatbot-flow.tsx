@@ -1,4 +1,14 @@
 import '@xyflow/react/dist/style.css';
+import Image from 'next/image';
+import TalkBubble from '../../public/chatBot/talk-bubble-icon.svg';
+import ConclusionIcon from '../../public/chatBot/conclusion-icon.svg';
+import FeedbackIcon from '../../public/chatBot/feedback-icon.png';
+import FolderIcon from '../../public/chatBot/open-file-folder-icon.svg';
+import LikeComment from '../../public/chatBot/like-comment-icon.svg';
+import QueryIcon from '../../public/chatBot/question-thinking-icon.svg';
+import ApiIcon from '../../public/chatBot/api-icon.svg';
+
+
 
 import type { Edge, OnReconnect, ReactFlowInstance } from '@xyflow/react';
 import {
@@ -16,8 +26,7 @@ import {
 } from '@xyflow/react';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ApiNodeForm from '@/components/ChatComponents/ApiNodeForm';
 import ButtonsInputForm from '@/components/ChatComponents/ButtonsInputForm';
 import ChatFlowHeader from '@/components/ChatComponents/ChatFlowHeader';
@@ -29,7 +38,7 @@ import FeedbackNodeForm from '@/components/ChatComponents/feedbackNodeForm';
 import SendMessageForm from '@/components/ChatComponents/SendMessageFrom';
 import { SideModal } from '@/components/sidemodal';
 import TestBot from '@/components/ChatComponents/TestBot';
-import { Chat } from '@/types/enums';
+import { Chat, CustomNodeProps } from '@/types/enums';
 
 const nodeComponents = [
   // {
@@ -38,27 +47,33 @@ const nodeComponents = [
   // },
   {
     type: Chat.sendMessage,
-    label: 'Send Message',
+    label: 'Message Node',
+    icon: TalkBubble,
   },
   {
     type: Chat.collectInput,
-    label: 'User Query',
+    label: 'User Query Node',
+    icon: QueryIcon,
   },
   {
     type: Chat.buttonsInput,
     label: 'Options Node',
+    icon: ConclusionIcon,
   },
   {
     type: Chat.feedback,
-    label: 'feedback',
+    label: 'Feedback Node',
+    icon: FeedbackIcon,
   },
   {
     type: Chat.collectFile,
-    label: 'Collect File',
+    label: 'Collect File Node',
+    icon: FolderIcon,
   },
   {
     type: Chat.api,
     label: 'API Node',
+    icon: ApiIcon,
   },
 ];
 const initialNodes = [
@@ -87,18 +102,38 @@ function ChatbotFlow() {
     if (source === target) return false;
     return true;
   };
-  const nodeTypes = Chat
-    ? {
-        [Chat.chatTrigger]: CustomNode,
-        [Chat.collectInput]: CustomNode,
-        [Chat.sendMessage]: CustomNode,
-        [Chat.buttonsInput]: CustomNode,
-        [Chat.collectFile]: CustomNode,
-        [Chat.button]: CustomNode,
-        [Chat.api]: CustomNode,
-        [Chat.feedback]: CustomNode,
-      }
-    : {};
+  const nodeTypes = useMemo(() => {
+    if (!Chat) return {};
+
+    const createCustomNode = (type: string) => {
+      const NodeComponent = (props: CustomNodeProps) => (
+        <CustomNode
+          {...props}
+          setNodes={setNodes}
+          reactFlowNodes={nodes}
+          edges={edges}
+          setEdges={setEdges}
+        />
+      );
+
+      NodeComponent.displayName = `CustomNode(${type})`;
+
+      return NodeComponent;
+    };
+
+    return {
+      [Chat.chatTrigger]: createCustomNode(Chat.chatTrigger),
+      [Chat.collectInput]: createCustomNode(Chat.collectInput),
+      [Chat.sendMessage]: createCustomNode(Chat.sendMessage),
+      [Chat.buttonsInput]: createCustomNode(Chat.buttonsInput),
+      [Chat.conditionNode]: createCustomNode(Chat.conditionNode),
+      [Chat?.conditionDecoder]: createCustomNode(Chat.conditionDecoder),
+      [Chat.collectFile]: createCustomNode(Chat.collectFile),
+      [Chat.button]: createCustomNode(Chat.button),
+      [Chat.api]: createCustomNode(Chat.api),
+      [Chat.feedback]: createCustomNode(Chat.feedback),
+    };
+  }, [nodes, edges, setNodes, setEdges]);
 
   const transformNodes = (nodes, edges) => {
     const targetMap = Object.fromEntries(
@@ -427,7 +462,8 @@ function ChatbotFlow() {
           onPaneClick={onPaneClick}
           onReconnectStart={onReconnectStart}
           onReconnect={onReconnect}
-          onReconnectEnd={onReconnectEnd}>
+          onReconnectEnd={onReconnectEnd}
+        >
           <ChatFlowHeader
             onSave={onSave}
             onTest={onTest}
@@ -439,11 +475,11 @@ function ChatbotFlow() {
           <Background
             variant={BackgroundVariant.Dots}
             gap={10}
-            // color={'#f1f1f1'}
+            // color={'#ECF7D'}
             id="1"
           />
           {/* <Background
-            variant={BackgroundVariant.Lines}
+            variant={BackgroundVariant.Cross}
             gap={100}
             color={'#ccc'}
             id="2"
@@ -453,16 +489,29 @@ function ChatbotFlow() {
 
           <Panel
             position=""
-            className="absolute left-0 top-20 w-52 rounded-md bg-white shadow-md p-6 ">
+            className="absolute left-0 top-20 min-w-fit w-2/12 rounded-md bg-yellow-50 shadow-md p-6 "
+          >
             <header className="mb-2">Node Components</header>
-            <div className="flex flex-col flex-wrap gap-1">
+            <div className="flex flex-col flex-wrap gap-y-2">
               {nodeComponents.map((node) => (
                 <div
                   key={node.type}
-                  className="rounded-md border border-gray-300 bg-white-0 p-1 text-sm hover:border-gray-400"
+                  className="rounded-md border border-gray-300 bg-white shadow-md p-4 text-sm hover:border-gray-400"
                   draggable
-                  onDragStart={(e) => onDragStart(e, node?.type)}>
-                  {node.label}
+                  onDragStart={(e) => onDragStart(e, node?.type)}
+                >
+                  <div className="flex gap-2 items-center">
+                    <div>
+                      <Image
+                        src={node?.icon}
+                        alt={node?.label
+                        }
+                        height={20}
+                        width={20}
+                      />
+                    </div>
+                    <h1>{node.label}</h1>
+                  </div>
                 </div>
               ))}
             </div>

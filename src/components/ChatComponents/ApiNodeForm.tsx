@@ -33,7 +33,7 @@ function ApiNodeForm({ node }: { node: Node<ChatFlowNodesData> }) {
       <div className="text-sm mt-4">
         Bot will send this message with response.
       </div>
-      <div className="mt-1 rounded-md border bg-white-0 p-2">
+      <div className="mt-1 rounded-md border bg-white p-2">
         <textarea
           className="h-24 w-full resize-none border-none p-2 text-xs focus:ring-0"
           defaultValue={message ? message : ''}
@@ -45,7 +45,7 @@ function ApiNodeForm({ node }: { node: Node<ChatFlowNodesData> }) {
           }}
         />
       </div>
-      <div className="mt-2 rounded-md border bg-white-0 p-2 ">
+      <div className="mt-2 rounded-md border bg-white p-2 ">
         <label htmlFor="name" className="text-xs text-black">
           API Name
         </label>
@@ -60,7 +60,8 @@ function ApiNodeForm({ node }: { node: Node<ChatFlowNodesData> }) {
               [Chat.name]: apiName?.find((api) => api.value === newName)?.label,
               value: newName,
             });
-          }}>
+          }}
+        >
           <option value={''} disabled selected>
             Select...
           </option>

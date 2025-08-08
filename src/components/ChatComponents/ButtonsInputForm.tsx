@@ -84,7 +84,7 @@ function ButtonsInputForm({ node, nodes, edges }) {
 
       <div className="mt-1 text-sm text-gray-600">Bot asks this Question</div>
 
-      <div className="mt-2 rounded-md border bg-white-0 p-2">
+      <div className="mt-2 rounded-md border bg-white p-2">
         <textarea
           className="h-24 w-full resize-none border-none p-2 text-xs focus:ring-0"
           defaultValue={message ? message : ''}
@@ -96,13 +96,15 @@ function ButtonsInputForm({ node, nodes, edges }) {
           }}
         />
       </div>
-      <div className="bg-white-0  rounded-md">
-        <h2 className="mt-1 text-sm text-gray-600">Options buttons to be shown</h2>
+      <div className="bg-white  rounded-md">
+        <h2 className="mt-1 text-sm text-gray-600">
+          Options buttons to be shown
+        </h2>
         {connectedNodes?.map((ele) => (
           <div key={ele?.id} className="flex items-center space-x-2 mt-2">
             <input
               type="text"
-              className="bg-blue-c2 text-center text-white-0 outline-none w-full rounded-md p-2"
+              className="bg-blue-900 text-center text-white outline-none w-full rounded-md p-2"
               defaultValue={ele?.data?.[Chat.nodeTitle] || ''}
               onChange={(e) => {
                 const newTitle = e.target.value;
@@ -116,14 +118,17 @@ function ButtonsInputForm({ node, nodes, edges }) {
             <img
               src="/delete.svg"
               onClick={() => onRemoveOption(ele)}
-              className={`cursor-pointer ${connectedNodes?.length<2 && 'hidden'}`}
+              className={`cursor-pointer ${
+                connectedNodes?.length < 2 && 'hidden'
+              }`}
             />
           </div>
         ))}
         <div className="flex justify-end">
           <button
             onClick={onAddOption}
-            className="mt-2 bg-white-100 text-sm text-white p-2 rounded">
+            className="mt-2 bg-gray-400 text-sm text-white p-2 rounded"
+          >
             + Add Option
           </button>
         </div>
