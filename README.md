@@ -5,7 +5,7 @@ Project Name – Chat-bot config.
 
 ## Live Demo
 Check out the live demo version here:
-🔗 https://chat-bot-config-7i57-pqkck5kfz-hemuk4631s-projects.vercel.app
+🔗 [chat-bot-config.vercel.app](https://chat-bot-config.vercel.app/)
 
 ## Features
 ✅ Chat-flow cretion, edit & updation.
